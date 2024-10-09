@@ -121,5 +121,5 @@ The new video with the resized map 1000x1000:
 
 
 
-https://github.com/user-attachments/assets/241495e5-1238-4f2c-9427-3ddb4c92a441
+https://github.com/user-attachments/assets/05a27121-ffbf-498c-b36d-3b3ba93c38bd
 
