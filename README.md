@@ -119,5 +119,7 @@ Because of this, I decided to redimension the map into a 1000x1000 pixels size s
 
 The new video with the resized map 1000x1000:
 
-https://github.com/user-attachments/assets/d80dc77f-120a-40d1-9c7e-4873e26a36f1
+
+
+https://github.com/user-attachments/assets/241495e5-1238-4f2c-9427-3ddb4c92a441
 
