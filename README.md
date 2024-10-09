@@ -109,3 +109,15 @@ Here is an image of how the robot cleaned the house:
 Here is the video:
 
 https://github.com/user-attachments/assets/f03d9aed-9f15-450a-9eba-056c3115591f
+
+This video shows how my robot cleans with a map size of 720x720 pixels which is not really good.
+
+After this and after some tries I realized that the real problem was the size of the map as if I have a small sized map, the details are not taken into accound really much. Furtheremore, with the dilate funcion of OpenCv, the obstacles are
+not represented very well and precisely.
+
+Because of this, I decided to redimension the map into a 1000x1000 pixels size so I could get the details and precission of the obstacles better.
+
+The new video with the resized map 1000x1000:
+
+https://github.com/user-attachments/assets/d80dc77f-120a-40d1-9c7e-4873e26a36f1
+
