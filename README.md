@@ -72,6 +72,13 @@ In my case, the movement priority is:
 
 I say "Up" and "Down" taking into account that the map is a 2D map so there are only four possible movements.
 
+In order to move my robot, I had to create another funciton to convert from 2d to 3d. I needed to use this function to convert from a pixel to world coordinates.
+
+I made it like this as I had the following idea:
+
+To move my robot first I would search the target cell and extract a pixel from that cell to hace the target pixel. Then, I would convert that pixel to world 3D coordinates. Once I have all of this, I would align my robot to the new target 
+coordinates and once it is aligned, I would move my robot in a straight line in order to reach the new cell.
+
 Furthermore, I needed a backtracking algorithm so I decided to create my interest points array. In this array I stored all the points where I had more than one movement possibility and if in some point
 I didnt have anymore movements I would just return to my interest points to continue.
 But this was had an error, I was storing every interest point but I didnt remove them when they werent useful anymore. So, after realizing I had this error, I decided to remove every interest point if its adjacent cells were already visited by the robot.
@@ -123,3 +130,5 @@ The new video with the resized map 1000x1000:
 
 https://github.com/user-attachments/assets/05a27121-ffbf-498c-b36d-3b3ba93c38bd
 
+
+Because of this, I have decided to maintain this configuration for my map as the area cleaned is bigger and better than the previous one.
