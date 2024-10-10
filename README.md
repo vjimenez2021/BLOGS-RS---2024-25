@@ -1,9 +1,6 @@
 # BLOGS-RS---2024-25
 This is my repository to upload my Robótica de Servicio`s blogs.
 
-
-# Rob-tica-de-Servicio-24-25
-
 ## P1-Localized Vaccum Cleaner
 
 At first, I realized that the original map had the dimensions of (1012, 1013) pixels. Because of this, the first thing I did, was to create an empty matrix with the same dimensions to recreate the original map and start eroding it and redimensioning it.
