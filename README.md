@@ -31,6 +31,11 @@ First I measured the map and I calculated 9.75 meters from bottom to top and 9.7
 
 Then with the conversion matrix to get the pixel knowing the coordinates in the real world (from world to pixel) I could represent my robot in the new map image.
 
+![image](https://github.com/user-attachments/assets/386ec131-0c80-46bc-9db0-e254603dc6bc)
+
+![Screenshot from 2024-10-10 11-12-20](https://github.com/user-attachments/assets/858143da-29ff-4c8d-868c-4fda11190092)
+
+
 Thanks to this, I knew in every moment in which pixel my robot was:
 
 ![image](https://github.com/user-attachments/assets/08bdcbf9-09ea-4f56-b934-0039debfe08e)
@@ -132,3 +137,40 @@ https://github.com/user-attachments/assets/05a27121-ffbf-498c-b36d-3b3ba93c38bd
 
 
 Because of this, I have decided to maintain this configuration for my map as the area cleaned is bigger and better than the previous one.
+
+
+### Other problems faced
+
+I have faced some other problems with this exercise:
+The main problem I have faced is that I have advanced in the exercise with some errors in the conversion matrix and the conversion system which I have carried until I corrected them so I could do it better.
+Due to this and to know where the problem was I have also created some functions to depure my code. For example to know where the robot is (know in which cell it is):
+
+```python
+# Check on what cell the robot is
+def print_robot_cell():
+    pos_2d = transform_3d_to_2d()
+
+    x, y = pos_2d
+    print(f"Robot position in pixels: x = {x}, y = {y}")
+
+    cell_x, cell_y = get_robot_cell(pos_2d)
+    print(f"Robot is in cell: ({cell_x}, {cell_y})")
+
+    if (cell_x, cell_y) in cells_to_clean:
+        cells_to_clean.remove((cell_x, cell_y))
+        cells_cleaned.append((cell_x, cell_y))
+
+# Function to know the group a cell belongs to.
+def check_cell_status(row, col):
+    if (row, col) in cells_to_clean:
+        print(f"Cell ({col}, {row}) is in 'cells_to_clean'.")
+    elif (row, col) in cells_cleaned:
+        print(f"Cell ({col}, {row}) is in 'cells_cleaned'.")
+    elif (row, col) in cells_to_avoid:
+        print(f"Cell ({col}, {row}) is in 'cells_to_avoid'.")
+    else:
+        print(f"Cell ({col}, {row}) is not classified.")
+```
+
+With this two functions I could know the group a cell belonged to and know if I was classifying them in the correct way or not.
+I could also know in which cell was the robot detecting it was and know if I had the autolocalization in the correct way or not.
