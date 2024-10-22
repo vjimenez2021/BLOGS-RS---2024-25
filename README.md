@@ -171,3 +171,35 @@ def check_cell_status(row, col):
 
 With this two functions I could know the group a cell belonged to and know if I was classifying them in the correct way or not.
 I could also know in which cell was the robot detecting it was and know if I had the autolocalization in the correct way or not.
+
+
+## P2- Rescue Drone
+
+To cover the goal of this exercise, first I decided to learn how to move the drone as we had three different options:
+
+```python
+# 1. Position control
+
+    HAL.set_cmd_pos(x, y, z, az) # Commands the position (x,y,z) of the drone, in m and the yaw angle (az) (in rad) taking as reference the first takeoff point (map frame)
+
+# 2. Velocity control
+
+    HAL.set_cmd_vel(vx, vy, vz, az) # Commands the linear velocity of the drone in the x, y and z directions (in m/s) and the yaw rate (az) (rad/s) in its body fixed frame
+
+# 3. Mixed control
+
+    HAL.set_cmd_mix(vx, vy, z, az) # Commands the linear velocity of the drone in the x, y directions (in m/s), the height (z) related to the takeoff point and the yaw rate (az) (in rad/s)
+
+```
+
+I tried the thrrre of them bust the best option was the first one: HAL.set_cmd_pos().
+
+This is because in order to cover the impact area I wanted to cover it by using a square area and going from side to side of the square beginning at the bottom of it and finishing at it's top.
+
+By using this coverage, I had made a "imaginary" square which center is the area where the impact zone is known to be ("While survivors are known to be close to 40º16’47.23” N, 3º49’01.78” W").
+So knowing this, I have built a square to cover the area and its surroundings in search of survivors.
+
+### Video of the functioning
+
+https://github.com/user-attachments/assets/863309e4-b424-4289-81cd-b585de67b5b8
+
