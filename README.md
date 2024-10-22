@@ -196,12 +196,12 @@ To cover the goal of this exercise, first I decided to learn how to move the dro
 
 ```
 
-I tried the thrrre of them bust the best option was the first one: HAL.set_cmd_pos().
+I tried the three of them bust the best option was the first one: HAL.set_cmd_pos().
 
-This is because in order to cover the impact area I wanted to cover it by using a square area and going from side to side of the square beginning at the bottom of it and finishing at it's top.
+This is because in order to cover the impact area I wanted to cover it by using a square area and going from side to side of the square begining at the bottom of it and finishing at it's top.
 
-By using this coverage, I had made a "imaginary" square which center is the area where the impact zone is known to be ("While survivors are known to be close to 40º16’47.23” N, 3º49’01.78” W").
-So knowing this, I have built a square to cover the area and its surroundings in search of survivors.
+By using this coverage method, I had made an "imaginary" square which center is the area where the impact zone is known to be ("While survivors are known to be close to 40º16’47.23” N, 3º49’01.78” W").
+So, by knowing this, I have built a square to cover the area and its surroundings in search of survivors.
 
 For the searching, I used the face detection. I used this python code for face detecting with the image of my Ventral Camera.
 
@@ -256,6 +256,21 @@ while True:
  if cv.waitKey(10) == 27:
  break
 ```
+
+After this, my drone would detect every survivor facing frontally towards the ventral camera. This made the drone to detect some survivors but not all of them as if the survivor was not facing correctly towards the drone, it wouldn´t detect it.
+In order to correct this, I have implemented a function to constantly rotate the image captured by the ventral camera in order to make all the survivors appear frontally so I could detect them with the detection algorithm.
+
+Also, in order to carry out the battery level, I have implemented a simple counter that starts in a random numbre between 17500 and 22500 and if it reaches the 15% of the original quantity, the drone will go back to the boat.
+
+### Video of the demonstration of the battery
+
+
+
+https://github.com/user-attachments/assets/41b94d9e-c5e3-4944-92d7-2b6af9c491d9
+
+
+In this video I have set a very low battery to show how the drone goes back if the battery is low.
+As you can see, when the drone detects that the battery is low, it goes back to the boat and makes the landing.
 
 ### Video of the functioning
 
