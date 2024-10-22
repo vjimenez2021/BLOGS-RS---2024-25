@@ -1,6 +1,10 @@
 # BLOGS-RS---2024-25
 This is my repository to upload my Robótica de Servicio`s blogs.
 
+Index:
+- [Go to P1 - Localized Vaccum Cleaner](#p1-localized-vaccum-cleaner)
+- [Go to P2 - Rescue Drone](#p2-rescue-drone)
+
 ## P1-Localized Vaccum Cleaner
 
 At first, I realized that the original map had the dimensions of (1012, 1013) pixels. Because of this, the first thing I did, was to create an empty matrix with the same dimensions to recreate the original map and start eroding it and redimensioning it.
@@ -173,7 +177,7 @@ With this two functions I could know the group a cell belonged to and know if I 
 I could also know in which cell was the robot detecting it was and know if I had the autolocalization in the correct way or not.
 
 
-## P2- Rescue Drone
+## P2-Rescue Drone
 
 To cover the goal of this exercise, first I decided to learn how to move the drone as we had three different options:
 
