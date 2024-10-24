@@ -272,6 +272,16 @@ https://github.com/user-attachments/assets/41b94d9e-c5e3-4944-92d7-2b6af9c491d9
 In this video I have set a very low battery to show how the drone goes back if the battery is low.
 As you can see, when the drone detects that the battery is low, it goes back to the boat and makes the landing.
 
+
+### Various problems
+I have encountered various problems such in the face detections because the distance between the registered positions of the survivors was not enough so it detected more bodies than the 6 they were.
+Adjusting the distances, and some other variables such the step size (which were also adjusted) it detected the survivors correctly.
+Also at the time of the landing, the drone didnt go exactly to (0,0) so I needed to be constantly calculating the distance to the boat so when it was perfectly centered it would land at the top of the boat.
+
+With the battery I also had to do a bunch of tries in order to know the range of battery I needed to let the drone finish covering the area. If I set the battery to low, the drone didnt get to the zone correctly
+but if I set the battery to high, I couldnt demonstrate that it worked. So because of this I have made two videos to demonstrate that it works perfectly.
+
+
 ### Video of the functioning
 
 https://github.com/user-attachments/assets/863309e4-b424-4289-81cd-b585de67b5b8
