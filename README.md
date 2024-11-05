@@ -4,6 +4,7 @@ This is my repository to upload my Robótica de Servicio`s blogs.
 Index:
 - [Go to P1 - Localized Vaccum Cleaner](#p1-localized-vaccum-cleaner)
 - [Go to P2 - Rescue Drone](#p2-rescue-drone)
+- [Go to P3 - Autoparking](#p3-autoparking)
 
 ## P1-Localized Vaccum Cleaner
 
@@ -286,3 +287,4 @@ but if I set the battery to high, I couldnt demonstrate that it worked. So becau
 
 https://github.com/user-attachments/assets/863309e4-b424-4289-81cd-b585de67b5b8
 
+## P3-Autoparking
