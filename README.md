@@ -288,3 +288,17 @@ but if I set the battery to high, I couldnt demonstrate that it worked. So becau
 https://github.com/user-attachments/assets/863309e4-b424-4289-81cd-b585de67b5b8
 
 ## P3-Autoparking
+
+This project aims to develop an autonomous parking system capable of parallel parking a simulated vehicle between two parked cars or next to a single parked car. The vehicle is controlled by a series of maneuvers based on laser sensor data, orientation adjustments, and precise movement control. Throughout the development of this system, I encountered several challenges that required refining the approach and logic multiple times. Here, I’ll explain the steps I took, the difficulties I faced, and the solutions I implemented.
+
+### Overview of the problem
+
+The goal of this project was to simulate an autonomous parallel parking system. The system uses sensor data to detect the environment, align the vehicle parallel to parked cars, and execute a series of maneuvers to fit the vehicle into a parking space. I utilized HAL’s simulated sensors and actuators, specifically focusing on laser-based distance sensors and yaw readings, to manage the vehicle’s movements and orientation.
+
+### Steps and code explanation
+
+#### Aligning the Car with Parked Vehicles
+The first step in the parking process is to align the car parallel to the parked vehicles. This involves calculating the slope (or "pendiente") of a line that represents the row of parked cars. I used laser sensors to detect nearby objects and gather distance data to estimate this slope. This process required adjusting the vehicle's yaw (orientation) until it became approximately parallel to the line of parked cars.
+
+#### Difficulties Faced
+One of the main challenges here was accurately calculating the slope. Initially, I found that small inaccuracies in the laser data caused the car to appear slightly tilted, even when aligned. I adjusted the tolerance for the slope and experimented with different thresholds to achieve a more consistent alignment.
