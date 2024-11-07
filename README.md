@@ -300,5 +300,50 @@ The goal of this project was to simulate an autonomous parallel parking system. 
 #### Aligning the Car with Parked Vehicles
 The first step in the parking process is to align the car parallel to the parked vehicles. This involves calculating the slope (or "pendiente") of a line that represents the row of parked cars. I used laser sensors to detect nearby objects and gather distance data to estimate this slope. This process required adjusting the vehicle's yaw (orientation) until it became approximately parallel to the line of parked cars.
 
-#### Difficulties Faced
+##### Difficulties Faced
 One of the main challenges here was accurately calculating the slope. Initially, I found that small inaccuracies in the laser data caused the car to appear slightly tilted, even when aligned. I adjusted the tolerance for the slope and experimented with different thresholds to achieve a more consistent alignment.
+
+#### Detecting a Suitable Parking Spot
+
+Once the vehicle is aligned, the next step is to detect an available parking spot. The car moves forward along the row of parked cars until it detects a large enough gap that meets the threshold.
+
+In order to enter in a good way into the spot, after detecting it, I move the vehicle a little bit forward in order to start cenering it and turning it towards the spot.
+
+##### Difficulties Faced
+
+Initially, the car sometimes failed to detect an appropriate gap or would detect false positives. Fine-tuning the distance parameters helped reduce these errors. I also found that occasional minor adjustments to the vehicle's orientation during this phase improved the detection accuracy.
+
+#### Parking Maneuver Phases
+
+The parking maneuver is divided into several phases to simplify the process and ensure precise control over the vehicle. Here’s a breakdown of each phase:
+
+    Angle Adjustment - The car reverses at an angle to position itself for parallel parking.
+    Straight Reverse - The car moves backward in a straight line until it detects the rear boundary.
+    Alignment - If the car is misaligned, it performs final adjustments by moving forward and backward to achieve parallel positioning.
+
+#### Handling Edge Cases
+
+One unique aspect of this project was handling the scenario where only one car is parked, either in front or behind the vehicle. In such cases, the car should be able to park itself without using the usual two-car boundary. I implemented an additional check to determine if only a single parked car is present and adjusted the maneuver logic accordingly.
+
+## Videos
+### Video of Parking Between Two Cars
+
+
+
+https://github.com/user-attachments/assets/f6f42833-3b1a-48a4-8aa7-ff8c219621e7
+
+
+
+### Video of Parking with Only One Car in Front
+
+
+https://github.com/user-attachments/assets/9a61e8c8-bab9-4330-a25c-3530bf1566b3
+
+
+
+### Video of Parking with Only One Car in Back
+
+
+
+https://github.com/user-attachments/assets/5afa9b0d-500c-4eb7-9814-090ac084d6c9
+
