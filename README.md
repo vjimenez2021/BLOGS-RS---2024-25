@@ -5,6 +5,7 @@ Index:
 - [Go to P1 - Localized Vaccum Cleaner](#p1-localized-vaccum-cleaner)
 - [Go to P2 - Rescue Drone](#p2-rescue-drone)
 - [Go to P3 - Autoparking](#p3-autoparking)
+- [Go to P4 - Warehouse](#p4-warehouse)
 
 ## P1-Localized Vaccum Cleaner
 
@@ -342,6 +343,8 @@ https://github.com/user-attachments/assets/9a61e8c8-bab9-4330-a25c-3530bf1566b3
 
 
 ### Video of Parking with Only One Car in Back
+
+## P4-Warehouse
 
 
 
