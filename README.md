@@ -348,3 +348,53 @@ https://github.com/user-attachments/assets/5afa9b0d-500c-4eb7-9814-090ac084d6c9
 
 
 ## P4-Warehouse
+
+### Map
+When I started, I needed to process the map of the warehouse. The map was an image where obstacles were black and free space was white. I converted it to grayscale and then used a dilation technique to "inflate" the obstacles. This step is crucial because the robot is big and needs more space to avoid colliding with obstacles.
+
+By enlarging the obstacles, I created a safer path for the robot to navigate. After that, I checked if the possible robot positions were valid based on the enlarged obstacles. This allowed me to plan safer routes for the robot, ensuring it would avoid getting too close to any obstacles.
+
+```python
+map_data_gray = np.zeros((map_height, map_width), dtype=np.uint8)
+for i in range(map_height):
+    for j in range(map_width):
+        r, g, b = map_data[i, j]
+        if r > 100:  # Blanco
+            map_data_gray[i, j] = 127
+        else:  # Negro o gris
+            map_data_gray[i, j] = 0
+
+inverted_map = cv2.bitwise_not(map_data_gray)
+kernel = np.ones((5, 5), np.uint8)  # Kernel para dilatación
+inverted_map_dilated = cv2.dilate(inverted_map, kernel, iterations=2)
+map_data_dilated = cv2.bitwise_not(inverted_map_dilated)
+
+```
+
+### Route planification
+Once I had processed the map, I used OMPL (Open Motion Planning Library) to plan the robot's path. OMPL is a library that helps with motion planning, which is basically figuring out how the robot can move from one point to another while avoiding obstacles.
+
+#### How I Calculated the Routes
+
+    State Space: I created a state space using OMPL's SE2StateSpace. This space represents the robot’s position (x, y) and orientation (yaw), basically where the robot is and which way it's facing.
+
+    Bounds: I defined the bounds for the state space based on the warehouse dimensions.
+
+    Space Information: Then, I set up the SpaceInformation object in OMPL, which manages things like checking whether a state (position + orientation) is valid or not (this is important for collision detection).
+
+    Planning Algorithms: I tested different path planners like RRT, RRT*, and SST to find the best path. Each planner tries to find the best path from the start to the goal, but they have different methods of searching the space. Once a path is found, I simplify it to make it smoother using PathSimplifier.
+
+    Choosing the Best Path: I evaluated the paths based on their safety, which means how far they stay from obstacles. The path with the largest safety margin is selected.
+
+#### How I Check if the State is Valid
+
+To check if the robot's position and orientation are valid, I defined the isStateValid function. Here's how it works:
+
+    Convert World to Pixel Coordinates: I first convert the robot's world coordinates (in meters) to pixel coordinates using the scale I calculated earlier for the map.
+
+    Robot’s Size: I calculate the robot's size in pixels based on its real-world dimensions (like width and length). If the robot is lifting a shelf, I also include the shelf’s size in this calculation.
+
+    Check for Collisions:
+        I check the region around the robot's position (including the area occupied by the robot and any lifted shelf). If any part of this region overlaps with an obstacle in the map, the state is considered invalid.
+
+    Final Validation: If the region around the robot (taking into account its size and any lifted shelf) is clear of obstacles, the state is valid; otherwise, it’s invalid.
