@@ -425,3 +425,35 @@ Well, I needed to paint those black lines in case I wanted to get more than one 
 
 https://github.com/user-attachments/assets/25aa5c8e-d3b2-4838-97ec-cc7978d2bfc7
 
+
+### Probles Faced
+
+#### 1. Scale Conversion and Map Alignment
+
+Problem: One of the first hurdles I ran into was accurately converting real-world coordinates to pixels in the map. The map’s scale wasn’t always perfectly aligned with the actual dimensions of the warehouse. This caused errors in movement.
+
+Solution: I carefully calculated the scaling factors for both the horizontal and vertical axes.
+
+#### 2. State Validation and Robot Size
+
+Problem: Validating whether a given state is valid, especially when the robot is interacting with shelves or other structures. The robot's dimensions had to adjust dynamically when lifting a shelf, complicating the state validation process.
+
+Solution: I implemented a dynamic adjustment for the robot’s size when lifting a shelf, but this added complexity. When the robot is lifting a shelve, its dimensions are considered bigger.
+
+#### 3. Path Planning Algorithms (OMPL)
+
+Problem: While experimenting with different planners in OMPL (like RRT, RRT*, and SST), I found that not all algorithms produced the same quality of results. Some paths generated were unnecessarily long or got dangerously close to obstacles.
+
+Solution: I ran several different planners and evaluated which one provided the safest path. So comparing those paths calculated, I used the safest one.
+
+#### 4. Interaction with the Environment
+
+Problem: When the robot interacts with objects, like lifting shelves, the environment around it changes, so the robot needs to account for both the free space and the modified space when planning its path. This added a layer of complexity to path planning, as the robot's shape and surroundings continuously shift.
+
+Solution: To address this, I used an isStateValid function that dynamically checks for the robot’s new footprint when it's lifting a shelf.
+
+#### 5. Dynamic Map
+
+Problem: The map is continuosly changing when the robot lifts or puts down the shelves.
+
+Solution: To solve it, I decided to paint the area of the shelve in white when lifting it to recalculate in an appropiate way the path back. And so, painting in black the shelve when putting it down to recalculate new routes in appropiate ways.
