@@ -376,25 +376,52 @@ Once I had processed the map, I used OMPL (Open Motion Planning Library) to plan
 
 #### How I Calculated the Routes
 
-    State Space: I created a state space using OMPL's SE2StateSpace. This space represents the robot’s position (x, y) and orientation (yaw), basically where the robot is and which way it's facing.
+State Space: I created a state space using OMPL's SE2StateSpace. This space represents the robot’s position (x, y) and orientation (yaw), basically where the robot is and which way it's facing.
 
-    Bounds: I defined the bounds for the state space based on the warehouse dimensions.
+Bounds: I defined the bounds for the state space based on the warehouse dimensions.
 
-    Space Information: Then, I set up the SpaceInformation object in OMPL, which manages things like checking whether a state (position + orientation) is valid or not (this is important for collision detection).
+Space Information: Then, I set up the SpaceInformation object in OMPL, which manages things like checking whether a state (position + orientation) is valid or not (this is important for collision detection).
 
-    Planning Algorithms: I tested different path planners like RRT, RRT*, and SST to find the best path. Each planner tries to find the best path from the start to the goal, but they have different methods of searching the space. Once a path is found, I simplify it to make it smoother using PathSimplifier.
+Planning Algorithms: I tested different path planners like RRT, RRT*, and SST to find the best path. Each planner tries to find the best path from the start to the goal, but they have different methods of searching the space. Once a path is found, I simplify it to make it smoother using PathSimplifier.
 
-    Choosing the Best Path: I evaluated the paths based on their safety, which means how far they stay from obstacles. The path with the largest safety margin is selected.
+Choosing the Best Path: I evaluated the paths based on their safety, which means how far they stay from obstacles. The path with the largest safety margin is selected.
 
 #### How I Check if the State is Valid
 
 To check if the robot's position and orientation are valid, I defined the isStateValid function. Here's how it works:
 
-    Convert World to Pixel Coordinates: I first convert the robot's world coordinates (in meters) to pixel coordinates using the scale I calculated earlier for the map.
+Convert World to Pixel Coordinates: I first convert the robot's world coordinates (in meters) to pixel coordinates using the scale I calculated earlier for the map.
 
-    Robot’s Size: I calculate the robot's size in pixels based on its real-world dimensions (like width and length). If the robot is lifting a shelf, I also include the shelf’s size in this calculation.
+Robot’s Size: I calculate the robot's size in pixels based on its real-world dimensions (like width and length). If the robot is lifting a shelf, I also include the shelf’s size in this calculation.
 
-    Check for Collisions:
-        I check the region around the robot's position (including the area occupied by the robot and any lifted shelf). If any part of this region overlaps with an obstacle in the map, the state is considered invalid.
+Check for Collisions:
+    I check the region around the robot's position (including the area occupied by the robot and any lifted shelf). If any part of this region overlaps with an obstacle in the map, the state is considered invalid.
 
-    Final Validation: If the region around the robot (taking into account its size and any lifted shelf) is clear of obstacles, the state is valid; otherwise, it’s invalid.
+Final Validation: If the region around the robot (taking into account its size and any lifted shelf) is clear of obstacles, the state is valid; otherwise, it’s invalid.
+
+Now, my robot was "working" but not very well:
+
+https://github.com/user-attachments/assets/960e7c75-e86b-4e1b-835a-f520444cc5b7
+
+As you can see, I didnt recalculate the way back properly as I wasnt having into account that the shelve I was lifting was no more an obstacle.
+
+### Map control
+Once I made the route planification, I needed to take into account that if my robot lifts a shelve, there is no more obstacles in that area as the shelve is no more an obstacle.
+For this reason, before recalculating the path back to the unload area, I paint the area where the shelve was in white so when I recalculated the return path, I didnt had into account that obstacle any more.
+In the same way, when I left the shelve in the unload area, I paint in black the borders of the two smaller sides o the shelve so I simulate the area where the robot cannot go through anymore as there is a new obstacle there.
+
+Now it worked a lot better:
+
+
+https://github.com/user-attachments/assets/d1b5c0ef-36f7-422f-9883-dee0f36d739a
+
+As you can see, now when the roboot lifts the shelve, the lifted shelve dissappears in the map as it is not an obstacle anymore. When the robots leaves the shelve down, it is painted as two black lines.
+
+#### But, why to paint the two black lines?
+Well, I needed to paint those black lines in case I wanted to get more than one shelve instead of only one. Drawing that black lines would let the robot recalculate the new route for the new shelve avoiding the collision with the one just left.
+
+##### Here is anothe video of the demonstration:
+
+
+https://github.com/user-attachments/assets/25aa5c8e-d3b2-4838-97ec-cc7978d2bfc7
+
