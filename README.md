@@ -518,3 +518,36 @@ Where:
 - ***t*** is a 3x1 translation vector.
 
 Matrix multiplication combines these transformations into a global pose.
+
+
+### Step 3: Combining Data from Multiple Tags
+
+When multiple tags are detected, their data is aggregated to refine the robot's position. A weighted average is used, giving higher priority to tags closer to the camera. The weights are inversely proportional to the tag’s estimated distance, ensuring robustness in noisy detections.
+
+### Step 4: Odometry Integration
+
+When no tags are detected, the robot's position must still be updated to maintain accurate localization. To achieve this, we calculate the change in position and orientation since the last known estimate.
+
+This is done using the getOdom function, which provides the robot's position based on its odometry readings. However, instead of using the absolute position directly, we calculate the difference between the current odometry reading and the previous one. This difference represents how much the robot has moved during the last iteration.
+
+Once the movement is determined, we apply it to the previously estimated position, effectively updating it with the new odometry-based displacement. This ensures continuous tracking even in the absence of visible tags.
+
+### Step 5: Visualization and GUI Integration
+
+The final step is visualizing the estimated global position of the robot and its surrounding environment. 
+Now, I will leave some videos to show how it works all mixed up:
+
+#### Video 1: One only tag and then, dissappears:
+
+
+https://github.com/user-attachments/assets/4b5b2d29-a863-48c4-aa2e-c578fdbe1f6c
+
+As shown in the video, the camera detects one tag, and the estimated position is good. Then the robot doesn´t see the tag anymore and thanks to the odometry mentioned before, the estimated position is available to follor the robot's position and orientation pretty accurately.
+
+
+#### Video 2: One tag, the dissappears and finds one new tag:
+
+
+https://github.com/user-attachments/assets/4e9070b7-81ed-4dda-b763-2109668f3111
+
+As in the first video, the robot estimated position is good even after dissappearing the first tag. After the robo finds a second tag, the estimated position automaticaly corrects itself.
