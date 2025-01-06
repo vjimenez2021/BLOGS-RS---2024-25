@@ -551,3 +551,27 @@ As shown in the video, the camera detects one tag, and the estimated position is
 https://github.com/user-attachments/assets/4e9070b7-81ed-4dda-b763-2109668f3111
 
 As in the first video, the robot estimated position is good even after dissappearing the first tag. After the robo finds a second tag, the estimated position automaticaly corrects itself.
+
+
+
+### Problems and Solutions
+
+During the implementation of the visual localization system, several challenges were encountered. Below is a summary of these issues and the approaches taken to address them.
+
+
+#### **1. Inaccurate Transformations**
+- **Problem:** Small errors in the camera calibration or the detected tag corners led to inaccuracies in the estimated position of the robot.
+- **Solution:** 
+  - Ensured proper calibration of the camera using known calibration patterns to refine the intrinsic matrix \( K \) and distortion coefficients.
+
+#### **2. Multiple Tag Integration**
+- **Problem:** When multiple tags were detected, their individual estimates often conflicted, leading to noisy or biased results.
+- **Solution:** 
+  - Implemented a **weighted averaging** system for combining multiple tag positions.
+  - The weights were inversely proportional to the distance of the tag from the camera, prioritizing closer tags with higher accuracy.
+
+#### **3. Odometry Drift**
+- **Problem:** When no tags were visible, relying solely on odometry caused the position estimate to drift over time due to accumulated errors.
+- **Solution:** 
+  - Used odometry only for short-term updates between tag detections.
+  - Whenever tags were detected again, the system corrected the drift by recalibrating the position based on the tags.
