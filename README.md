@@ -461,78 +461,60 @@ Solution: To solve it, I decided to paint the area of the shelve in white when l
 
 ## P5-Visual Loc
 
-# Visual Robot Localization with SolvePnP and AprilTags
+### Objective
 
-In this blog, I'll guide you step by step through a practical implementation of visual robot localization using **AprilTags** and **SolvePnP**. By the end, you'll understand how to design and implement a similar system.
+The goal of this project is to estimate the robot's global position by detecting **AprilTags** in its environment. The process involves:
 
----
+1. Detecting tags in the camera's field of view.
+2. Computing the relative position of the camera to the detected tags.
+3. Using transformations to calculate the robot's global position.
 
-## Objective
+This project leverages matrix mathematics, camera calibration, and geometric properties of AprilTags to achieve reliable localization.
 
-The goal of this project is to estimate the global position of a robot by detecting **AprilTags** in the environment. This involves:
+### Step 1: Camera Configuration
 
-1. Detecting tags in the camera's view.
-2. Calculating the camera's relative position to each tag.
-3. Transforming the data into a global robot position using reference frames.
+The camera configuration is a critical first step. It involves setting up the **camera matrix**, which defines how 3D points in the real world are projected onto a 2D image plane. The camera matrix is represented as:
 
----
+![image](https://github.com/user-attachments/assets/9f7b4745-bea6-4c8c-947f-b0728e280ed8)
 
-### Step 1: Initial Setup
+Where:
+- \( f_x \) and \( f_y \): The focal lengths in the x and y axes, in pixels. Typically, these are derived from the image resolution and lens properties.
+- \( c_x \) and \( c_y \): The coordinates of the optical center of the camera (principal point).
+- The third row is \([0, 0, 1]\), ensuring a homogeneous transformation.
 
-To begin, I initialized the **AprilTags** detector and configured the camera parameters. This includes setting the focal length and defining the camera matrix. The camera matrix plays a crucial role in mapping image points to 3D space.
+Here’s the code to set up the camera configuration:
 
----
+```python
+# Configure camera parameters
+image = HAL.getImage()
+size = image.shape
+focal_length = size[1]
+center = (size[1] / 2, size[0] / 2)
 
-### Step 2: Loading Tag Configuration
+camera_matrix = np.array(
+    [[focal_length, 0, center[0]], [0, focal_length, center[1]], [0, 0, 1]],
+    dtype="double",
+)
+dist_coeffs = np.zeros((4, 1))
+```
 
-I loaded a configuration file containing predefined positions of each tag in the global coordinate system. This information serves as the basis for transforming tag-relative positions into global coordinates.
+### Step 2: AprilTags Detection and Transformation
 
-The configuration file specifies the position and orientation of each tag in the environment. These details are critical for localization accuracy.
+The next step is detecting AprilTags in the camera’s view. Once detected, each tag’s unique ID and corner positions are identified. This data is used to calculate the tag's relative position and orientation using the SolvePnP algorithm.
 
----
+To compute the robot's global position, we chain multiple transformations:
 
-### Step 3: Detecting AprilTags
+- World-to-Tag (RT_WorldToMarker): This matrix defines the tag's global position and orientation.
+- Camera-to-Tag (RT_CameraToMarker): Derived from SolvePnP, it represents the camera's position relative to the tag.
+- Camera-to-Robot (RT_CameraToRobot): This fixed transformation maps the camera's position to the robot’s reference frame.
 
-The next step was detecting AprilTags in the captured image. For this, I used a Python library capable of efficiently identifying tags and providing their 2D image coordinates along with their unique IDs.
+Each of these transformations is a 4x4 matrix of the form:
 
-Once detected, the tags are highlighted on the image to visualize the detection process, and their data is logged for further processing.
+![image](https://github.com/user-attachments/assets/84a2d040-6e21-433b-b6e7-18d5189be834)
 
----
+Where:
 
-### Step 4: Calculating Transformations
+- ***R*** is a 3x3 rotation matrix.
+- ***t*** is a 3x1 translation vector.
 
-For each detected tag, I computed the transformation between the camera and the tag using the **SolvePnP** algorithm. This method uses the tag's known 3D geometry and its 2D image coordinates to estimate the camera's position and orientation relative to the tag.
-
-The result of this computation is a transformation matrix, which represents the spatial relationship between the camera and the detected tag.
-
----
-
-### Step 5: Combining Transformations for Global Localization
-
-Using the predefined global position of each tag, I transformed the camera's relative position into the global coordinate system. By chaining transformations (tag-to-world and camera-to-tag), I determined the robot's position in the global frame.
-
-To improve accuracy, especially when multiple tags are detected, I implemented a weighted average based on the confidence of each tag's detection.
-
----
-
-### Step 6: Handling Odometry for Continuous Updates
-
-When no tags are detected, the system relies on odometry to update the robot's position. By tracking changes in the robot's position and orientation, odometry serves as a fallback for localization. However, it is less accurate over time due to drift, so the system prioritizes tag-based updates when available.
-
----
-
-### Step 7: Visualizing Results
-
-Finally, I visualized the estimated global position of the robot on a GUI and displayed the processed camera feed, including detected tags. This real-time feedback ensures the system's behavior is transparent and allows for debugging if needed.
-
----
-
-### Challenges and Insights
-
-Throughout this project, I encountered several challenges:
-
-- **Accuracy of Transformations**: Small errors in the camera parameters or tag detection can lead to significant inaccuracies. Calibrating the camera and refining the tag configuration were critical steps.
-- **Multiple Tag Integration**: When multiple tags are detected, combining their data required careful consideration of weighting to avoid bias.
-- **Odometry Drift**: Relying on odometry alone led to cumulative errors, highlighting the importance of integrating visual cues.
-
----
+Matrix multiplication combines these transformations into a global pose.
