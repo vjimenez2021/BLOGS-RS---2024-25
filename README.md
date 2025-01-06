@@ -6,6 +6,7 @@ Index:
 - [Go to P2 - Rescue Drone](#p2-rescue-drone)
 - [Go to P3 - Autoparking](#p3-autoparking)
 - [Go to P4 - Warehouse](#p4-warehouse)
+- [Go to P5 - Visual Loc](#p5-visual-loc)
 
 ## P1-Localized Vaccum Cleaner
 
@@ -426,7 +427,7 @@ Well, I needed to paint those black lines in case I wanted to get more than one 
 https://github.com/user-attachments/assets/25aa5c8e-d3b2-4838-97ec-cc7978d2bfc7
 
 
-### Probles Faced
+### Problems Faced
 
 #### 1. Scale Conversion and Map Alignment
 
@@ -457,3 +458,5 @@ Solution: To address this, I used an isStateValid function that dynamically chec
 Problem: The map is continuosly changing when the robot lifts or puts down the shelves.
 
 Solution: To solve it, I decided to paint the area of the shelve in white when lifting it to recalculate in an appropiate way the path back. And so, painting in black the shelve when putting it down to recalculate new routes in appropiate ways.
+
+## P5-Visual Loc
