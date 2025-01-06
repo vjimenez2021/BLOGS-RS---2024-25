@@ -460,3 +460,79 @@ Problem: The map is continuosly changing when the robot lifts or puts down the s
 Solution: To solve it, I decided to paint the area of the shelve in white when lifting it to recalculate in an appropiate way the path back. And so, painting in black the shelve when putting it down to recalculate new routes in appropiate ways.
 
 ## P5-Visual Loc
+
+# Visual Robot Localization with SolvePnP and AprilTags
+
+In this blog, I'll guide you step by step through a practical implementation of visual robot localization using **AprilTags** and **SolvePnP**. By the end, you'll understand how to design and implement a similar system.
+
+---
+
+## Objective
+
+The goal of this project is to estimate the global position of a robot by detecting **AprilTags** in the environment. This involves:
+
+1. Detecting tags in the camera's view.
+2. Calculating the camera's relative position to each tag.
+3. Transforming the data into a global robot position using reference frames.
+
+---
+
+### Step 1: Initial Setup
+
+To begin, I initialized the **AprilTags** detector and configured the camera parameters. This includes setting the focal length and defining the camera matrix. The camera matrix plays a crucial role in mapping image points to 3D space.
+
+---
+
+### Step 2: Loading Tag Configuration
+
+I loaded a configuration file containing predefined positions of each tag in the global coordinate system. This information serves as the basis for transforming tag-relative positions into global coordinates.
+
+The configuration file specifies the position and orientation of each tag in the environment. These details are critical for localization accuracy.
+
+---
+
+### Step 3: Detecting AprilTags
+
+The next step was detecting AprilTags in the captured image. For this, I used a Python library capable of efficiently identifying tags and providing their 2D image coordinates along with their unique IDs.
+
+Once detected, the tags are highlighted on the image to visualize the detection process, and their data is logged for further processing.
+
+---
+
+### Step 4: Calculating Transformations
+
+For each detected tag, I computed the transformation between the camera and the tag using the **SolvePnP** algorithm. This method uses the tag's known 3D geometry and its 2D image coordinates to estimate the camera's position and orientation relative to the tag.
+
+The result of this computation is a transformation matrix, which represents the spatial relationship between the camera and the detected tag.
+
+---
+
+### Step 5: Combining Transformations for Global Localization
+
+Using the predefined global position of each tag, I transformed the camera's relative position into the global coordinate system. By chaining transformations (tag-to-world and camera-to-tag), I determined the robot's position in the global frame.
+
+To improve accuracy, especially when multiple tags are detected, I implemented a weighted average based on the confidence of each tag's detection.
+
+---
+
+### Step 6: Handling Odometry for Continuous Updates
+
+When no tags are detected, the system relies on odometry to update the robot's position. By tracking changes in the robot's position and orientation, odometry serves as a fallback for localization. However, it is less accurate over time due to drift, so the system prioritizes tag-based updates when available.
+
+---
+
+### Step 7: Visualizing Results
+
+Finally, I visualized the estimated global position of the robot on a GUI and displayed the processed camera feed, including detected tags. This real-time feedback ensures the system's behavior is transparent and allows for debugging if needed.
+
+---
+
+### Challenges and Insights
+
+Throughout this project, I encountered several challenges:
+
+- **Accuracy of Transformations**: Small errors in the camera parameters or tag detection can lead to significant inaccuracies. Calibrating the camera and refining the tag configuration were critical steps.
+- **Multiple Tag Integration**: When multiple tags are detected, combining their data required careful consideration of weighting to avoid bias.
+- **Odometry Drift**: Relying on odometry alone led to cumulative errors, highlighting the importance of integrating visual cues.
+
+---
