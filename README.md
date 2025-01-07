@@ -553,6 +553,13 @@ https://github.com/user-attachments/assets/4e9070b7-81ed-4dda-b763-2109668f3111
 As in the first video, the robot estimated position is good even after dissappearing the first tag. After the robo finds a second tag, the estimated position automaticaly corrects itself.
 
 
+#### Video 3: All mixed
+
+
+
+https://github.com/user-attachments/assets/c23b1a64-ae63-41e7-b748-d3baea0b7e3e
+
+
 
 ### Problems and Solutions
 
